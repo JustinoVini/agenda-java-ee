@@ -7,6 +7,7 @@ public class JavaBeans {
 	private String email;
 	
 	public JavaBeans(String idcon, String nome, String fone, String email) {
+		super();
 		this.idcon = idcon;
 		this.nome = nome;
 		this.fone = fone;
@@ -14,7 +15,7 @@ public class JavaBeans {
 	}
 
 	public JavaBeans() {
-	
+		super();
 	}
 
 	public String getIdcon() {
