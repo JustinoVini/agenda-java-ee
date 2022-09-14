@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.DAO;
 import model.JavaBeans;
 
-@WebServlet(urlPatterns = { "/controller", "/main", "/insert" })
+@WebServlet(urlPatterns = { "/controller", "/main", "/insert", "/select" })
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAO dao = new DAO();
@@ -36,6 +36,8 @@ public class Controller extends HttpServlet {
 			contatos(request, response);
 		} else if (action.equals("/insert")) {
 			novoContato(request, response);
+		} else if (action.equals("/select")) {
+			listarContato(request, response);
 		} else {
 			response.sendRedirect("index.html");
 		}
@@ -56,10 +58,10 @@ public class Controller extends HttpServlet {
 	protected void novoContato(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Teste de recebimento dos dados do formulario.
-		//System.out.println(request.getParameter("nome"));
-		//System.out.println(request.getParameter("fone"));
-		//System.out.println(request.getParameter("email"));
-		
+		// System.out.println(request.getParameter("nome"));
+		// System.out.println(request.getParameter("fone"));
+		// System.out.println(request.getParameter("email"));
+
 		// Setar as variaveis javabeans
 		contato.setNome(request.getParameter("nome"));
 		contato.setFone(request.getParameter("fone"));
@@ -68,5 +70,24 @@ public class Controller extends HttpServlet {
 		dao.inserirContato(contato);
 		// Redirecionamento para o documento agenda.jsp
 		response.sendRedirect("main");
+	}
+	
+	// Editar contato
+	protected void listarContato(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// Recebimento do ID do contato que será editado
+		String idcon = request.getParameter("idcon");
+		// Setar a variavel JavaBeans
+		contato.setIdcon(idcon);
+		// Executar o método selecionar contato
+		dao.selecionarContato(contato);
+		// Setar os atributos do formulario com o conteudo javabeans
+		request.setAttribute("idcon", contato.getIdcon());
+		request.setAttribute("nome", contato.getNome());
+		request.setAttribute("fone", contato.getFone());
+		request.setAttribute("email", contato.getEmail());
+		// Encaminhar ao documento editar.jsp
+		RequestDispatcher rd = request.getRequestDispatcher("editar.jsp");
+		rd.forward(request, response);
 	}
 }
