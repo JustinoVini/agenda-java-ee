@@ -48,9 +48,9 @@ public class DAO {
 			System.out.println(e);
 		}
 	}
-	
+
 	/** CRUD READ **/
-	public ArrayList<JavaBeans> listarContatos(){
+	public ArrayList<JavaBeans> listarContatos() {
 		// Criando um obj para acessar a classe JavaBeans
 		ArrayList<JavaBeans> contatos = new ArrayList<>();
 		String read = "select * from contatos order by nome";
@@ -77,11 +77,10 @@ public class DAO {
 			return null;
 		}
 	}
-	
+
 	/* CRUD UPDATE */
-	/* Necessario ter 2 metodos 
-	 * 1 para selecionar o contato  
-	 * 2 para alterar o contato
+	/*
+	 * Necessario ter 2 metodos 1 para selecionar o contato, 2 para alterar o contato
 	 */
 	// Selecionar o contato
 	public void selecionarContato(JavaBeans contato) {
@@ -91,7 +90,7 @@ public class DAO {
 			PreparedStatement pst = con.prepareStatement(read2);
 			pst.setString(1, contato.getIdcon());
 			ResultSet rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				// Setar as variaveis javabeans
 				contato.setIdcon(rs.getString(1));
 				contato.setNome(rs.getString(2));
@@ -103,5 +102,22 @@ public class DAO {
 			System.out.println(e);
 		}
 	}
-	
+
+	// Editar contato
+	public void alterarContato(JavaBeans contato) {
+		String update = 
+				"update contatos set nome =?,fone =?,email =? where idcon =?";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(update);
+			pst.setString(1, contato.getNome());
+			pst.setString(2, contato.getFone());
+			pst.setString(3, contato.getEmail());
+			pst.setString(4, contato.getIdcon());
+			pst.executeUpdate();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 }
